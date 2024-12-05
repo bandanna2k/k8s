@@ -1,5 +1,8 @@
-URL=`minikube service -n education node-port --url`
+URL1=`minikube service -n education node-port1 --url`
+URL2=`minikube service -n education node-port2 --url`
 
-curl $URL
+set -x
+curl -I $URL1
+curl -I $URL2
 
 
