@@ -1,0 +1,91 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: education
+  labels:
+    name: education
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service1
+  namespace: education
+spec:
+  selector:
+    app: nginx-app1
+  ports:
+    - port: 8080
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx1
+  namespace: education
+  labels:
+    app: nginx-app1
+spec:
+  containers:
+    - name: nginx1
+      image: 'nginx:1.27.3'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service2
+  namespace: education
+spec:
+  selector:
+    app: nginx-service2
+  ports:
+    - port: 8080
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx2
+  namespace: education
+  labels:
+    app: nginx-app2
+spec:
+  containers:
+    - name: nginx2
+      image: 'nginx:1.27.3'
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: node-port
+  namespace: education
+spec:
+  type: NodePort
+  ports:
+    - port: 80          # Port exposed within the cluster
+      targetPort: 8080  # Port on the pods
+      nodePort: 30000   # Port accessible externally on each node
+  selector:
+    app: nginx-app1     # Select pods with this label
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: example-ingress
+spec:
+  rules:
+    - host: example.com
+      http:
+        paths:
+          - path: /foo
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service1
+                port:
+                  number: 8080
+          - path: /bar
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service2
+                port:
+                  number: 8080
+---
