@@ -1,9 +1,10 @@
+set -e
 
 source lint.sh
 
 # Start and wait to be ready
 minikube start
-minikube kubectl -- wait pod --all --for=condition=Ready --namespace=kube-system --timeout=5s
+minikube kubectl -- wait pod --all --for=condition=Ready --namespace=kube-system --timeout=60s
 
 source apply.sh
 

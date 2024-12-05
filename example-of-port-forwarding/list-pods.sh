@@ -1,0 +1,1 @@
+minikube kubectl -- get po -A --output=wide
