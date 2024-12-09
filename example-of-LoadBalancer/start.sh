@@ -1,4 +1,4 @@
-echo "WORK IN PROGRESS (What is the point of a ClusterIp)"
+echo "WORK IN PROGRESS (Need to expose to outside world"
 
 set -e
 
@@ -12,8 +12,3 @@ minikube kubectl -- wait pod --all --for=condition=Ready --namespace=kube-system
 source apply.sh
 minikube kubectl -- wait pod --all --for=condition=Ready --namespace=education --timeout=60s
 
-set -x
-minikube kubectl -- proxy --port=8080 &
-sleep 1
-
-curl -I http://localhost:8080/api/v1/namespaces/education/services/cluster-ip1/proxy
