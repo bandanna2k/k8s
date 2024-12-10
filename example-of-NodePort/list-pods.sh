@@ -1,1 +1,0 @@
-kubectl get po -A

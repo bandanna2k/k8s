@@ -1,2 +1,2 @@
 
-minikube delete
+../stop.sh
