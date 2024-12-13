@@ -1,5 +1,3 @@
-echo "WORK IN PROGRESS (What is the point of a ClusterIp)"
-
 set -e
 
 source stop.sh
@@ -16,4 +14,7 @@ set -x
 minikube kubectl -- proxy --port=8080 &
 sleep 1
 
-curl -I http://localhost:8080/api/v1/namespaces/education/services/cluster-ip1/proxy
+xdg-open http://localhost:8080/api/v1/namespaces/education/services/cluster-ip1/proxy
+xdg-open http://localhost:8080/api/v1/namespaces/education/services/cluster-ip2/proxy
+
+

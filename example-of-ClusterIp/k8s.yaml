@@ -34,6 +34,8 @@ spec:
         limits:
           memory: "128Mi"
           cpu: "500m"
+      ports:
+        - containerPort: 80
 ---
 kind: Service
 apiVersion: v1
@@ -64,6 +66,8 @@ spec:
         limits:
           memory: "128Mi"
           cpu: "500m"
+      ports:
+        - containerPort: 80
 ---
 kind: Service
 apiVersion: v1
@@ -74,6 +78,21 @@ spec:
   type: ClusterIP
   selector:
     app: nginx-app1
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 80
+      protocol: TCP
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cluster-ip2
+  namespace: education
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx-app2
   ports:
     - name: http
       port: 8080
