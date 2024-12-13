@@ -12,3 +12,12 @@ minikube kubectl -- wait pod --all --for=condition=Ready --namespace=kube-system
 source apply.sh
 minikube kubectl -- wait pod --all --for=condition=Ready --namespace=education --timeout=60s
 
+
+IP=`minikube ip`
+kubectl patch service -n education nginx-loadbalancer -p '{"spec": {"type": "LoadBalancer", "externalIPs":["'${IP}'"]}}'
+
+set -x
+URL=`minikube service -n education nginx-loadbalancer --url`
+curl -I $URL
+
+
