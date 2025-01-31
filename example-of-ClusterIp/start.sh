@@ -14,7 +14,9 @@ set -x
 minikube kubectl -- proxy --port=8080 &
 sleep 1
 
-xdg-open http://localhost:8080/api/v1/namespaces/education/services/cluster-ip1/proxy
-xdg-open http://localhost:8080/api/v1/namespaces/education/services/cluster-ip2/proxy
+# curl http://localhost:8080/api/v1/namespaces/education/services/cluster-ip1/proxy
+curl http://localhost:8080/api/v1/namespaces/education/pods/
+curl http://localhost:8080/api/v1/namespaces/education/services/
 
 
+curl -I http://localhost:8080/api/v1/namespaces/education/services/cluster-ip1:8080/proxy
