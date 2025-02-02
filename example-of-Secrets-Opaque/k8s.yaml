@@ -1,0 +1,89 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: education
+  labels:
+    name: education
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opaque-secret
+  namespace: education
+type: Opaque
+data:
+  username: bXktdXNlcg==
+  password: bXktcGFzc3dvcmQ=
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: db
+  namespace: education
+spec:
+  selector:
+    app: db-pod
+  ports:
+    - port: 3306
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: db-pod
+  namespace: education
+  labels:
+    app: db-pod
+spec:
+  volumes:
+    - name: opaque
+      secret:
+        secretName: opaque-secret
+  containers:
+    - name: mysql
+      image: 'mysql:9.1.0'
+      env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: opaque-secret
+              key: password
+      resources:
+        requests:
+          memory: "2048Mi"
+          cpu: "500m"
+        limits:
+          memory: "2048Mi"
+          cpu: "500m"
+      volumeMounts:
+        - name: opaque
+          mountPath: /etc/secret
+          readOnly: true
+      livenessProbe:
+        exec:
+          command: ["mysqladmin", "ping"]
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        timeoutSeconds: 5
+      readinessProbe:
+        exec:
+          command: ["mysqladmin", "ping"]
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 5
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: db-node-port
+  namespace: education
+spec:
+  type: NodePort
+  ports:
+    - port: 3306        # Port exposed within the cluster
+      targetPort: 3306  # Port on the pods
+      nodePort: 30006   # Port accessible externally on each node
+  selector:
+    app: db-pod         # Select pods with this label
+
+
+
