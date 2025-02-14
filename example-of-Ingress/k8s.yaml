@@ -1,0 +1,93 @@
+# WIP
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: education
+  labels:
+    name: education
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: nginx-ingress
+  namespace: education
+spec:
+  rules:
+  - host: nginx.example
+    http:
+      paths:
+        - path: /nginx1
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx1
+              port:
+                number: 80
+        - path: /nginx2
+          pathType: Prefix
+          backend:
+            service:
+              name: nginx2
+              port:
+                number: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service1
+  namespace: education
+spec:
+  selector:
+    app: nginx-app1
+  ports:
+    - port: 80
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx1
+  namespace: education
+  labels:
+    app: nginx-app1
+spec:
+  containers:
+    - name: nginx1
+      image: 'nginx:1.27.3'
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service2
+  namespace: education
+spec:
+  selector:
+    app: nginx-app2
+  ports:
+    - port: 80
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx2
+  namespace: education
+  labels:
+    app: nginx-app2
+spec:
+  containers:
+    - name: nginx2
+      image: 'nginx:1.27.3'
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+---
