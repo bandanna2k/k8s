@@ -13,3 +13,6 @@ echo
 echo '----------------- REPLICA SETS -----------------'
 kubectl get rs -A
 
+echo
+echo '----------------- HORIZONTAL POD AUTOSCALERS -----------------'
+kubectl get hpa -A
