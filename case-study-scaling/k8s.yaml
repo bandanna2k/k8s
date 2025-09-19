@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: education
+  labels:
+    name: education
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: education
+  name: php-apache
+spec:
+  selector:
+    matchLabels:
+      run: php-apache
+  template:
+    metadata:
+      labels:
+        run: php-apache
+    spec:
+      containers:
+        - name: php-apache
+          # image hash as of Sept 19, 2025
+          image: 'registry.k8s.io/hpa-example@sha256:581697a37f0e136db86d6b30392f0db40ce99c8248a7044c770012f4e8491544'
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: 200m
+            limits:
+              memory: "128Mi"
+              cpu: 500m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: education
+  name: php-apache
+  labels:
+    run: php-apache
+spec:
+  ports:
+    - port: 80
+  selector:
+    run: php-apache
