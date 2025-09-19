@@ -1,5 +1,3 @@
-echo "WORK IN PROGRESS (Need to expose to outside world"
-
 set -e
 
 source stop.sh
@@ -14,10 +12,20 @@ minikube kubectl -- wait pod --all --for=condition=Ready --namespace=education -
 
 
 IP=`minikube ip`
-kubectl patch service -n education nginx-loadbalancer -p '{"spec": {"type": "LoadBalancer", "externalIPs":["'${IP}'"]}}'
+kubectl patch service -n education my-loadbalancer -p '{"spec": {"type": "LoadBalancer", "externalIPs":["'${IP}'"]}}'
 
-set -x
-URL=`minikube service -n education nginx-loadbalancer --url`
-curl -I $URL
+URL=`minikube service -n education my-loadbalancer --url`
+curl -I -X GET $URL
 
+echo "Find exposed port"
+kubectl describe -n education services/my-loadbalancer
+export NODE_PORT="$(kubectl get -n education services/my-loadbalancer -o go-template='{{(index .spec.ports 0).nodePort}}')"
+echo NODE_PORT=$NODE_PORT
+curl -I -X GET http://"$IP:$NODE_PORT"
 
+echo "Show load balancing"
+curl http://"$IP:$NODE_PORT"
+curl http://"$IP:$NODE_PORT"
+curl http://"$IP:$NODE_PORT"
+curl http://"$IP:$NODE_PORT"
+curl http://"$IP:$NODE_PORT"
