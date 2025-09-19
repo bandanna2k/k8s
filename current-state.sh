@@ -1,3 +1,7 @@
+echo '----------------- JOBS -----------------'
+kubectl get jobs -A
+
+echo
 echo '----------------- PODS -----------------'
 kubectl get pods -A
 

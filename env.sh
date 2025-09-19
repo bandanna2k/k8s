@@ -1,1 +1,1 @@
-alias kubectl="minikube kubectl --"
+#alias kubectl="minikube kubectl --"

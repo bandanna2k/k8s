@@ -65,4 +65,18 @@ spec:
         target:
           type: Utilization
           averageUtilization: 50
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      selectPolicy: Max
+      policies:
+        - type: Percent
+          value: 100      # Scale up by max 100% of current replicas
+          periodSeconds: 10
+    scaleDown:
+      stabilizationWindowSeconds: 30  # Default is 300s (5 min)
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 30
 ---

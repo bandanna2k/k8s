@@ -12,9 +12,13 @@ minikube addons enable metrics-server
 minikube kubectl -- wait pod --all --for=condition=Ready --namespace=kube-system --timeout=60s
 
 source apply.sh
-minikube kubectl -- wait pod --all --for=condition=Ready --namespace=education --timeout=60s
+minikube kubectl -- wait pod --all --for=condition=Ready --namespace=education --timeout=120s
+
+source ../current-state.sh
+
+echo "Start load generation Press enter to continue."
+read
+source ./generate-load.sh
 
 set -x
-source ./current-state.sh
-
 
