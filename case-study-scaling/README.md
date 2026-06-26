@@ -17,4 +17,5 @@ curl -L -s https://registry.k8s.io/v2/hpa-example/tags/list
 - Bazel build in Github
 - Bazel build with vertx app
 - Bazel build with vertx + vue + vite
-- App that can generate load
+- App that can generate load 
+  - Make app generic. JSON file for payload. Config item for default URL 
