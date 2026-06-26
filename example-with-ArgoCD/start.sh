@@ -10,7 +10,10 @@ minikube kubectl -- wait pod --all --for=condition=Ready --namespace=kube-system
 kubectl create namespace argocd
 kubectl -n argocd apply --server-side -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl -n argocd wait  --for=condition=available deployment/argocd-server  --timeout=120s
+
 kubectl -n argocd patch secret argocd-initial-admin-secret -p '{"data":{"password":"JDJhJDEyJFI5aC9jaVB6MGdpLlVSTk5YM2toMk9QU1Q5L1BnQmtxcXV6aS5TczcrS0lVZ08ydDBqV01VbQ=="}}'
+kubectl -n argocd rollout restart deployment/argocd-server
+kubectl -n argocd rollout status deployment/argocd-server --timeout=60s
 
 # My cluster
 source apply.sh
